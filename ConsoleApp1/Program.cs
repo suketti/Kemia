@@ -45,7 +45,6 @@ namespace ConsoleApp1
             {
                 Console.Write("5. feladat: Kérek egy vegyjelet:");
                 input = Console.ReadLine().ToLower();
-                Console.Write("\n");
                 if (input.Length == 1 || input.Length == 2)
                 {
                     found = true;
@@ -58,16 +57,45 @@ namespace ConsoleApp1
                 Console.WriteLine($"6. feladat: Keresés\n\t Az elem vegyjele: {foundItem.Vegyjel}\n\t Az elem neve: {foundItem.Nev}\n\t Rendszáma: {foundItem.Rendszam}\n\t Felfedezés éve: {foundItem.Ev}\n\t Felfedező: {foundItem.Felfedezo}");
             } else
             {
-                Console.WriteLine("Nincs ilyen elem az adatforrásban");
+                Console.WriteLine("6. feladat: Keresés\n\tNincs ilyen elem az adatforrásban");
             }
 
             int highestInterval = 0;
 
+            for (int i = 0; i < f.Count() - 1; i++)
+            {
+                if (f[i].Ev != "Ókor")
+                {
+                    if (Int32.Parse(f[i + 1].Ev) - Int32.Parse(f[i].Ev) > highestInterval)
+                    {
+                        highestInterval = Int32.Parse(f[i + 1].Ev) - Int32.Parse(f[i].Ev);
+                    }
+                }
+            }
+            Console.WriteLine($"7. feladat: {highestInterval} év volt a leghosszabb időszak két elem felfedezése között.");
+
+            Dictionary<int, int> statistics = new Dictionary<int, int>();
+
             foreach (Felfedezesek felfedezes in f)
             {
-
+                if (felfedezes.Ev != "Ókor") 
+                {
+                    int count = f.Count(x => x.Ev == felfedezes.Ev);
+                    if (count > 3 && statistics.ContainsKey(Int32.Parse(felfedezes.Ev)) == false)
+                    {
+                        statistics.Add(Int32.Parse(felfedezes.Ev), count);
+                    }
+                }
             }
 
+            Console.WriteLine("8. feladat: Statisztika");
+            int[] keys = statistics.Keys.ToArray();
+            int[] values = statistics.Values.ToArray();
+            for (int i = 0; i < statistics.Count; i++)
+            {
+                Console.WriteLine($"\t {keys[i]} : {values[i]} db");
+            }
+            
         }
     }
 }
